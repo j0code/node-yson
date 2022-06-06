@@ -36,7 +36,7 @@ const YSON = require("@j0code/yson")
 ## Specification
 YSON knows different datatypes
 
-### Number, Boolean, Null, String
+### Number, Boolean, Null, String, Hexadecimal Integer
 ```js
 5
 6.5
@@ -46,6 +46,7 @@ true
 false
 null
 "Hello World"
+#abcdef
 ```
 
 ### Object
