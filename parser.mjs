@@ -71,7 +71,7 @@ export default function parse(s) {
 					i++ // }
 					while(i < s.length && s[i].trim() == "") i++
 					if(i < s.length) {
-						new SyntaxError(`Unexpected token ${c} in JSON at position ${i}`)
+						throw new SyntaxError(`Unexpected token ${c} in JSON at position ${i}`)
 					} else {
 						return ci.v
 					}
@@ -120,7 +120,7 @@ export default function parse(s) {
 		}
 	}
 
-	new SyntaxError(`Unexpected end of YSON input`)
+	throw new SyntaxError(`Unexpected end of YSON input`)
 
 }
 

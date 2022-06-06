@@ -4,7 +4,6 @@ import parse from "./parser.mjs"
 export default class YSON {
 
 	static parse(s) {
-		console.log(s)
 		return parse(s)
 	}
 
@@ -14,8 +13,3 @@ export default class YSON {
 	}
 
 }
-
-let test = await YSON.load("./test.yson")
-console.group("result:")
-console.dir(test, {depth: 10})
-console.groupEnd()
