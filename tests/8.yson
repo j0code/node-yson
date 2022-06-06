@@ -1,0 +1,18 @@
+{
+	a: 5,
+	key1: {
+		key2: 5,
+		key3: "string",
+		bool: false,
+		ohno: null,
+		what: [1, 2, 3, 5, 7, "lol", false],
+		sub: {
+			f: 1,
+			_r: [{
+				h: "hulu"
+			}, 9]
+		}
+	},
+	top2: true,
+	x: 1
+}

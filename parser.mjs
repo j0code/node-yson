@@ -8,7 +8,7 @@
 	}
 }*/
 
-export default function parse(s) {
+export default function parse(s, types) {
 	let obj = {}
 	let index = [createIndex("val", 0)]
 	for(let i = 0; i < s.length; i++) {
@@ -62,7 +62,7 @@ export default function parse(s) {
 			if(c == "," || c == "}" || c == "]") {
 				//console.log(index)
 				index.pop()
-				if(ci.v == null) ci.v = parseValue(ci) // TODO: parse
+				if(ci.v == null) ci.v = parseValue(ci, types) // TODO: parse
 				if(pi) {
 					pi.v.push(ci.v)
 					pi.i++
@@ -89,7 +89,6 @@ export default function parse(s) {
 			}
 			if(c == "[") {
 				index.push(createIndex("arr"))
-				i--
 				continue
 			}
 			if(c == "\"") {
@@ -120,12 +119,13 @@ export default function parse(s) {
 				continue
 			}
 			index.push(createIndex("val", i))
+			if(c != ",") i--
 			break
 		}
 	}
 
 	if(index.length == 1) {
-		return parseValue(index[0])
+		return parseValue(index[0], types)
 	}
 
 	//console.table(index, ["v", "op", "s"])
@@ -144,10 +144,15 @@ function createIndex(op, pos) {
 	if(op == "arr")  return {v: [],   op, i: 0}
 }
 
-function parseValue(ci) {
+function parseValue(ci, types) {
+	//console.log(ci)
 	if(ci.v == null) return parseDataValue(ci)
 
 	// Type parsing
+	let type = ci.s.trim()
+	//console.log({type})
+	if(!type) return ci.v
+
 	return ci.v
 }
 
