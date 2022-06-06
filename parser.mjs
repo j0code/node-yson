@@ -10,7 +10,7 @@
 
 export default function parse(s) {
 	let obj = {}
-	let index = [createIndex("val")]
+	let index = [createIndex("val", 0)]
 	for(let i = 0; i < s.length; i++) {
 		let ci = index[index.length - 1] // current index
 		let pi = index[index.length - 2] // parent index
@@ -33,7 +33,7 @@ export default function parse(s) {
 				if(ci.i == 0) {
 					index.push(createIndex("key"))
 				} else if(ci.i == 1) {
-					index.push(createIndex("val"))
+					index.push(createIndex("val", i))
 				} else {
 					//console.log(index)
 					index.pop()
@@ -58,10 +58,11 @@ export default function parse(s) {
 			break
 
 			case "val":
+			//console.log(i, c, ci)
 			if(c == "," || c == "}" || c == "]") {
 				//console.log(index)
 				index.pop()
-				if(ci.v == null) ci.v = parseValue(ci.s.trim()) // TODO: parse
+				if(ci.v == null) ci.v = parseValue(ci) // TODO: parse
 				if(pi) {
 					pi.v.push(ci.v)
 					pi.i++
@@ -109,48 +110,61 @@ export default function parse(s) {
 			break
 
 			case "arr":
+			//console.log(i, c, ci)
 			if(c == "]") {
 				index.pop()
 				pi.v = ci.v
 				pi.done = true
+				//i--
+				//console.log(s[i], index)
 				continue
 			}
-			index.push(createIndex("val"))
+			index.push(createIndex("val", i))
 			break
 		}
 	}
 
+	if(index.length == 1) {
+		return parseValue(index[0])
+	}
+
+	//console.table(index, ["v", "op", "s"])
+	//console.dir(index, {depth: 5})
 	throw new SyntaxError(`Unexpected end of YSON input`)
 
 }
 
-function createIndex(op) {
+function createIndex(op, pos) {
 	//console.log("+", op)
 	if(op == "obj")  return {v: {},   op, i: 0}
 	if(op == "prop") return {v: [],   op, i: 0}
 	if(op == "key")  return {v: "",   op, i: 0}
-	if(op == "val")  return {v: null, op, i: 0, s: "", done: false}
+	if(op == "val")  return {v: null, op, i: 0, s: "", done: false, pos}
 	if(op == "str")  return {v: "",   op, i: 0}
 	if(op == "arr")  return {v: [],   op, i: 0}
 }
 
-function parseValue(s) {
+function parseValue(ci) {
+	if(ci.v == null) return parseDataValue(ci)
+
+	// Type parsing
+	return ci.v
+}
+
+function parseDataValue(ci) {
+	let s = ci.s.trim()
 	//console.log({s})
-	if(!isNaN(s)) return Number(s)
+	if(s && !isNaN(s)) return Number(s)
 	if(s == "null") return null
 	if(s == "false") return false
 	if(s == "true") return true
 	if(s.startsWith("\"") && s.endsWith("\"")) {
 		return s.substring(1, s.length -1)
 	}
+	throw new SyntaxError(`Invalid YSON value at ${ci.pos}`)
 }
 
 // TODO:
-// - mark values done after obj, arr or str to avoid overriding
-// - fix arr issues
-//    - first elem is 0 for test.yson key1.what
-//    - first elem is undefined
-// - add SyntaxErrors
 // - add colors (#123456)
 // - add Types {}
 // - stress-test it (write test cases)
