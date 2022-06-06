@@ -1,0 +1,22 @@
+{
+  "name": "@j0code/yson",
+  "version": "1.0.0",
+  "description": "YSON for node",
+  "main": "main.mjs",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node test.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/j0code/node-yson.git"
+  },
+  "author": "j0code",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/j0code/node-yson/issues"
+  },
+  "homepage": "https://github.com/j0code/node-yson#readme"
+}
