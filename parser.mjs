@@ -161,12 +161,16 @@ function parseDataValue(ci) {
 	if(s.startsWith("\"") && s.endsWith("\"")) {
 		return s.substring(1, s.length -1)
 	}
+	if(s.startsWith("#")) { // hexadecimal numbers
+		s = s.substr(1)
+		if(!s.match(/[^a-f0-9]/)) { // check for non-hexadecimal chars
+			return parseInt(s, 16)
+		}
+	}
 	throw new SyntaxError(`Invalid YSON value at ${ci.pos}`)
 }
 
 // TODO:
-// - add colors (#123456)
 // - add Types {}
 // - stress-test it (write test cases)
-// - fix lone values not working (see test3.yson)
 // - add YSON.stringify()
