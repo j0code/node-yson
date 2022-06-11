@@ -114,4 +114,4 @@ If you want to customize the behavior of stringify, you can define either `toYSO
 This is useful if you have private fields that you want to save.
 
 #### Note
-Native Types (like Map) take priority, so any classes names Map, Set, Date,... are ignored.
+Native Types (like Map) take priority, so any classes named Map, Set, Date,... are ignored.
