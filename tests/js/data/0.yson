@@ -8,8 +8,9 @@
 		g: 3,
 		h: 5
 	},
-	n: Map [
-		3, 4, 5
-	],
-	set: Set [1, 1, 2, 3, 5, 8, 13]
+	set: Set [1, 2, 3, 5, 8, 13],
+	b: false,
+	c: null,
+	d: {},
+	e: "yson>json"
 }

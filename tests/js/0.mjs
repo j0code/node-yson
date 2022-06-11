@@ -1,4 +1,5 @@
 import YSON from "../../main.mjs"
+import fs from "fs/promises"
 
 class Test {
 
@@ -19,9 +20,17 @@ class Test {
 
 export async function test() {
 
-	let data = await YSON.load("./tests/js/data/0.yson", [Test])
+	let data = await fs.readFile("./tests/js/data/0.yson", { encoding: "utf-8" })
+	//console.log(data)
 
-	console.log(data)
+	let o = await YSON.parse(data, [Test])
+	//console.log(o)
+	if(!o.a instanceof Test) throw "a not instanceof Test"
+
+	let back = YSON.stringify(o)
+	//console.log(back)
+	//console.log(data.replaceAll(/\s/g,""))
+	if(data.replaceAll(/\s/g,"") != back) throw "input and output don't match"
 
 	return false
 

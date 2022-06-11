@@ -20,4 +20,5 @@ export async function testSingle(i) {
 		errors++
 		console.error(`Test ${i} failed:`, e)
 	}
+	return errors
 }

@@ -1,13 +1,3 @@
-/*export default function parse(s) {
-	for(let i = 0; i < s.length; i++) {
-		let kr = captureKey(s, i)
-		i = kr.i
-		let vr = captureValue(s, i + 1)
-		i = vr.i
-		console.log({key: kr.key, value: vr.value})
-	}
-}*/
-
 export default function parse(s, types) {
 	let list = types || []
 	types = new Map()
@@ -157,7 +147,7 @@ function parseValue(ci, types) {
 
 	// Type parsing
 	let type = ci.s.trim()
-	console.log({type})
+	//console.log({type})
 	if(!type) return ci.v
 
 	// select type, call fromYSON...
@@ -196,9 +186,9 @@ function parseDataValue(ci) {
 }
 
 function parseNativeType(type, v) {
-	console.log("e", type, v)
-	console.log(v instanceof Object)
-	console.log(v instanceof Array)
+	//console.log("e", type, v)
+	//console.log(v instanceof Object)
+	//console.log(v instanceof Array)
 	if(type == "Map" && v instanceof Object) {
 
 		let m = new Map()
@@ -218,3 +208,8 @@ function parseNativeType(type, v) {
 	}
 	return v
 }
+
+// TODO:
+// - un-stringify strings
+// - parse Maps stored as Array
+// - add more native types (Date etc.)

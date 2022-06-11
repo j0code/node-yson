@@ -21,7 +21,7 @@ if(process.argv.length > 2) {
 			let data = await simple.testSingle(id[1])
 			console.log(data)
 		} else if(id[0] == "js") {
-			await js.testSingle(id[1])
+			errors += await js.testSingle(id[1])
 		} else {
 			console.log("Invalid test id")
 			process.kill(0)
