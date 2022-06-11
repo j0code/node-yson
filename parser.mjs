@@ -9,6 +9,14 @@
 }*/
 
 export default function parse(s, types) {
+	let list = types || []
+	types = new Map()
+	for(let t of list) {
+		if(!types.has(t.name)) {
+			types.set(t.name, t)
+		}
+	}
+
 	let obj = {}
 	let index = [createIndex("val", 0)]
 	for(let i = 0; i < s.length; i++) {
@@ -62,7 +70,7 @@ export default function parse(s, types) {
 			if(c == "," || c == "}" || c == "]") {
 				//console.log(index)
 				index.pop()
-				if(ci.v == null) ci.v = parseValue(ci, types) // TODO: parse
+				ci.v = parseValue(ci, types) // TODO: parse
 				if(pi) {
 					pi.v.push(ci.v)
 					pi.i++
@@ -72,7 +80,7 @@ export default function parse(s, types) {
 					i++ // }
 					while(i < s.length && s[i].trim() == "") i++
 					if(i < s.length) {
-						throw new SyntaxError(`Unexpected token ${c} in JSON at position ${i}`)
+						throw new SyntaxError(`Unexpected token ${c} in YSON at position ${i}`)
 					} else {
 						return ci.v
 					}
@@ -81,7 +89,7 @@ export default function parse(s, types) {
 				continue
 			}
 			if(ci.done && c.trim() != "") {
-				throw new SyntaxError(`Unexpected token ${c} in JSON at position ${i}`)
+				throw new SyntaxError(`Unexpected token ${c} in YSON at position ${i}`)
 			}
 			if(c == "{") {
 				index.push(createIndex("obj"))
@@ -145,13 +153,25 @@ function createIndex(op, pos) {
 }
 
 function parseValue(ci, types) {
-	//console.log(ci)
 	if(ci.v == null) return parseDataValue(ci)
 
 	// Type parsing
 	let type = ci.s.trim()
-	//console.log({type})
+	console.log({type})
 	if(!type) return ci.v
+
+	// select type, call fromYSON...
+	if(["Map","Set"].includes(type)) {
+		return parseNativeType(type, ci.v)
+	} else if(types.has(type)) {
+		let t = types.get(type)
+		if(t.fromYSON && t.fromYSON instanceof Function) {
+			let v = t.fromYSON(ci.v)
+			if(!(v instanceof t)) return ci.v
+			return v
+		}
+		return ci.v
+	}
 
 	return ci.v
 }
@@ -175,7 +195,26 @@ function parseDataValue(ci) {
 	throw new SyntaxError(`Invalid YSON value at ${ci.pos}`)
 }
 
-// TODO:
-// - add Types {}
-// - stress-test it (write test cases)
-// - add YSON.stringify()
+function parseNativeType(type, v) {
+	console.log("e", type, v)
+	console.log(v instanceof Object)
+	console.log(v instanceof Array)
+	if(type == "Map" && v instanceof Object) {
+
+		let m = new Map()
+		for(let k of Object.keys(v)) {
+			m.set(k, v[k])
+		}
+		return m
+
+	} else if(type == "Set" && v instanceof Array) {
+
+		let s = new Set()
+		for(let i of v) {
+			s.add(i)
+		}
+		return s
+
+	}
+	return v
+}
