@@ -66,7 +66,7 @@ The difference to JSON is that you don't need "" around keys
 ```
 
 ### Types
-Note: this is in developement in therefore is subject to change
+Note: this is in development in therefore is subject to change
 ```js
 {
   a: Date {
@@ -79,18 +79,19 @@ Note: this is in developement in therefore is subject to change
     key1: value1,
     key2: value2
   },
-  d: Set {
-    entries: []
-  },
+  d: Set [value1, value2],
   e: YourClass {
     x: 5
     y: 3
-  }
+  },
+	f: YourClass [ // Note: if you don't want this to work, return null on static .fromYSON()
+		1, 2, 3
+	]
 }
 ```
 
 ### Custom Types
-Note: this is in developement in therefore is subject to change
+Note: this is in development in therefore is subject to change
 
 #### parse
 You can read your own classes back
@@ -111,3 +112,6 @@ If you want to customize the behavior of stringify, you can define either `toYSO
 (`toYSON()` is prioritized)
 
 This is useful if you have private fields that you want to save.
+
+#### Note
+Native Types (like Map) take priority, so any classes names Map, Set, Date,... are ignored.
