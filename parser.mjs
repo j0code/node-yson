@@ -16,15 +16,16 @@ export default function parse(s, types) {
 
 		switch(ci.op) {
 			case "obj":
-			if(c == "}") {
+			if(c == "}" || s[i+1] == "}") {
 				//console.log(index)
 				index.pop()
 				pi.v = ci.v
 				pi.done = true
-				if(index.length < 3) i--
+				if(c != "}") i++
 				continue
 			}
 			index.push(createIndex("prop"))
+			i--
 			break
 
 			case "prop":
@@ -83,6 +84,7 @@ export default function parse(s, types) {
 			}
 			if(c == "{") {
 				index.push(createIndex("obj"))
+				i--
 				continue
 			}
 			if(c == "[") {
