@@ -71,7 +71,7 @@ export default function parse(s, types) {
 					i++ // }
 					while(i < s.length && s[i].trim() == "") i++
 					if(i < s.length) {
-						throw new SyntaxError(`Unexpected token ${c} in YSON at position ${i}`)
+						throw new SyntaxError(`Unexpected token ${s[i]} in YSON at position ${i}`)
 					} else {
 						return ci.v
 					}
