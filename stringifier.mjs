@@ -13,7 +13,7 @@ export default function stringify(o) {
 	return stringifyValue(o)
 }
 
-function stringifyObject(o) {
+function stringifyObject(o, isarr) {
 	if(!o) return null
 
 	let s = []
@@ -22,7 +22,8 @@ function stringifyObject(o) {
 		let v = o[k]
 		v = stringifyValue(v)
 		//console.log({k, v, c: o[k]})
-		s.push(`${k}:${v}`)
+		if (isarr) s.push(v)
+		else s.push(`${k}:${v}`)
 	}
 
 	return s.join(",")
@@ -61,20 +62,20 @@ function stringifyType(v) {
 	switch(t) {
 		case "Object":
 		case "Array":
-		s = stringifyObject(v)
+		s = stringifyObject(v, isarr)
 		break
 
 		case "Map":
 		v = Object.fromEntries(v)
-		s = `{${stringifyObject(v)}}`
+		s = `{${stringifyObject(v, false)}}`
 		break
 
 		case "Set":
-		s = `[${Array.from(v)}]`
+		s = `[${stringifyObject(Array.from(v), true)}]`
 		break
 
 		case "ArrayBuffer":
-		s = `[${Array.from(new Uint8Array(v))}]`
+		s = `[${stringifyObject(Array.from(new Uint8Array(v)), true)}]`
 		break
 
 		default:
