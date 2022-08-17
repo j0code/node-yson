@@ -73,6 +73,10 @@ function stringifyType(v) {
 		s = `[${Array.from(v)}]`
 		break
 
+		case "ArrayBuffer":
+		s = `[${Array.from(new Uint8Array(v))}]`
+		break
+
 		default:
 		// Custom Type
 		if(v.toYSON && v.toYSON instanceof Function) {
