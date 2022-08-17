@@ -80,7 +80,7 @@ function stringifyType(v) {
 		} else if(v.toJSON && v.toJSON instanceof Function) {
 			v = v.toJSON()
 		}
-		s = stringifyValue(v)
+		s = `{${stringifyObject(v)}}`
 		break
 	}
 
