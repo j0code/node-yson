@@ -1,6 +1,9 @@
 # YScript Object Notation
 YSON implementation for JavaScript
 
+## 🔥 DEPRECATED 🔥
+⚠ Use [@j0code/yson](https://github.com/j0code/yson) instead
+
 YSON is similar to JSON.
 Main benefits:
 - smaller filesize
